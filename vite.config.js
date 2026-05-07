@@ -6,7 +6,19 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "./src"),
+      '@': path.resolve(__dirname, './src'),
     },
+  },
+  build: {
+    chunkSizeWarningLimit: 1500,
+  },
+  server: {
+    historyApiFallback: true,
+    host: '0.0.0.0',
+    port: 3000,
+    hmr: {
+      clientPort: 3000,
+    },
+    allowedHosts: ['.e2b.app', '.e2b.dev'],
   },
 })
