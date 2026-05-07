@@ -1,14 +1,13 @@
 import React, { useEffect } from 'react';
-import { ThemeProvider } from '@/components/ThemeProvider';
-import { Navbar } from './components/Navbar';
-import { Hero } from './components/Hero';
-import { AboutUs } from './components/AboutUs';
-import { MissionVision } from './components/MissionVision';
-import { Services } from './components/Services';
-import { Process } from './components/Process';
-import { SpareParts } from './components/SpareParts';
-import { Contact } from './components/Contact';
-import { Footer } from './components/Footer';
+import { Navbar } from './components/Navbar.jsx';
+import { Hero } from './components/Hero.jsx';
+import { AboutUs } from './components/AboutUs.jsx';
+import { MissionVision } from './components/MissionVision.jsx';
+import { Services } from './components/Services.jsx';
+import { Process } from './components/Process.jsx';
+import { SpareParts } from './components/SpareParts.jsx';
+import { Contact } from './components/Contact.jsx';
+import { Footer } from './components/Footer.jsx';
 
 export default function App() {
   // Use useEffect to set a dark theme class on body to ensure consistency
@@ -17,20 +16,18 @@ export default function App() {
   }, []);
 
   return (
-    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-      <div className="min-h-screen bg-black text-white font-sans selection:bg-red-500/30">
-        <Navbar />
-        <main>
-          <Hero />
-          <AboutUs />
-          <MissionVision />
-          <Services />
-          <Process />
-          <SpareParts />
-          <Contact />
-        </main>
-        <Footer />
-      </div>
-    </ThemeProvider>
+    <div className="min-h-screen bg-black text-white font-sans selection:bg-red-500/30">
+      <Navbar />
+      <main>
+        <Hero />
+        <AboutUs />
+        <MissionVision />
+        <Services />
+        <Process />
+        <SpareParts />
+        <Contact />
+      </main>
+      <Footer />
+    </div>
   );
 }
