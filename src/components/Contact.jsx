@@ -8,7 +8,7 @@ export function Contact() {
   const contacts = [
     {
       icon: <User className="h-6 w-6 text-white" />,
-      title: "Jesus Vargas",
+      title: "Contacto",
       number: "222 723 3653",
       href: "tel:+522227233653"
     },
