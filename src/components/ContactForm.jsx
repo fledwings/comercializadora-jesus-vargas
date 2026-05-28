@@ -36,7 +36,7 @@ export function ContactForm() {
     setStatus(null);
 
     try {
-      // 1. Guardar en base de datos
+      // 1. Guardar en base de datos (Opcional, no bloquea el envío de correo)
       const { error: dbError } = await supabase
         .from('contact_messages')
         .insert([{
@@ -48,8 +48,7 @@ export function ContactForm() {
         }]);
 
       if (dbError) {
-        console.error('Error saving to database:', dbError);
-        throw new Error('No se pudo guardar el mensaje en la base de datos.');
+        console.warn('Advertencia: No se pudo guardar en la base de datos, procediendo a enviar correo:', dbError);
       }
 
       // 2. Enviar email
