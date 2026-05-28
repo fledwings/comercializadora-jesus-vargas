@@ -14,7 +14,7 @@ export function ContactForm() {
     name: '',
     email: '',
     phone: '',
-    subject: '',
+    subject: 'Venta de camiones',
     message: ''
   });
   

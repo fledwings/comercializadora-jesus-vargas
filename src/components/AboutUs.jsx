@@ -118,7 +118,7 @@ export function AboutUs() {
                   className="w-fit border-red-900/50 hover:bg-red-900/20 text-white bg-transparent h-12 px-6"
                 >
                   <a 
-                    href="https://maps.google.com/?q=Carretera+federal+Puebla-Tehuacán+km.+28.5+Santiago+Acatlán+Puebla" 
+                    href="https://maps.app.goo.gl/UG8FCbc3VvGytKe38?g_st=iw" 
                     target="_blank" 
                     rel="noopener noreferrer"
                   >
