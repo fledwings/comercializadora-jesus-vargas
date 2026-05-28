@@ -45,7 +45,8 @@ export function ContactForm() {
       setStatus('success');
       setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
     } catch (err) {
-      console.error('Error sending email:', err);
+      console.error('Error sending email details:', err);
+      if (err.context) console.error('Error context:', await err.context.json().catch(() => 'No JSON context'));
       setStatus('error');
     } finally {
       setIsSubmitting(false);
@@ -107,8 +108,9 @@ export function ContactForm() {
                 <Input 
                   id="phone" 
                   name="phone" 
+                  type="tel"
                   required 
-                  placeholder="123 456 7890"
+                  placeholder="Ej: 5581153338 o 55 8115 3338"
                   value={formData.phone}
                   onChange={handleChange}
                   className="bg-black/50 border-red-900/40 text-white focus-visible:ring-red-600 focus-visible:border-red-500 placeholder:text-gray-600"
@@ -163,7 +165,7 @@ export function ContactForm() {
                 className="bg-red-500/10 border border-red-500/30 text-red-400 p-4 rounded-md flex items-center gap-3"
               >
                 <AlertCircle className="h-5 w-5 flex-shrink-0" />
-                <p>Hubo un error al enviar el mensaje. Por favor, intenta usar los números de teléfono.</p>
+                <p>Hubo un error al enviar el mensaje. Por favor, intenta comunicarte a nuestros números telefónicos directamente.</p>
               </motion.div>
             )}
 
