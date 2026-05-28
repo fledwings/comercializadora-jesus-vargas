@@ -55,24 +55,35 @@ export function ContactForm() {
         console.warn('Error al conectar con la base de datos:', e);
       }
 
-      // 2. Enviar email usando Supabase Edge Function
-      const { data, error } = await supabase.functions.invoke('send-email', {
-        body: {
-            name: formData.name,
-            email: formData.email,
-            phone: formData.phone,
-            subject: formData.subject,
-            message: formData.message
-        }
+      // 2. Enviar email usando FormSubmit (Backend Simple)
+      const response = await fetch("https://formsubmit.co/ajax/comercializadoravargasf@hotmail.com", {
+        method: "POST",
+        headers: { 
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+            Nombre: formData.name,
+            Correo: formData.email,
+            Teléfono: formData.phone,
+            Asunto: formData.subject,
+            Mensaje: formData.message,
+            _subject: `Nuevo mensaje de contacto: ${formData.subject}`,
+            _template: "table"
+        })
       });
 
-      if (error) {
-        console.error('Error from edge function:', error);
-        throw error;
+      if (!response.ok) {
+        throw new Error('Error al enviar el correo');
       }
       
       setStatus('success');
       setFormData({ name: '', email: '', phone: '', subject: 'Venta de camiones', message: '' });
+      
+      // Limpiar mensaje de éxito después de 5 segundos
+      setTimeout(() => {
+        setStatus(null);
+      }, 5000);
     } catch (err) {
       console.error('Error in contact form submission:', err);
       if (err instanceof Error) {
@@ -180,12 +191,20 @@ export function ContactForm() {
 
             {status === 'success' && (
               <motion.div 
-                initial={{ opacity: 0, scale: 0.95 }} 
-                animate={{ opacity: 1, scale: 1 }} 
-                className="bg-green-500/10 border border-green-500/30 text-green-400 p-4 rounded-md flex items-center gap-3"
+                initial={{ opacity: 0, scale: 0.8, y: 10 }} 
+                animate={{ opacity: 1, scale: 1, y: 0 }} 
+                exit={{ opacity: 0, scale: 0.8 }}
+                transition={{ type: "spring", bounce: 0.5 }}
+                className="bg-green-500/15 border border-green-500/40 text-green-400 p-5 rounded-lg flex flex-col items-center justify-center gap-3 shadow-[0_0_20px_rgba(34,197,94,0.15)]"
               >
-                <CheckCircle2 className="h-5 w-5 flex-shrink-0" />
-                <p>¡Mensaje enviado con éxito! Nos comunicaremos contigo pronto.</p>
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
+                >
+                  <CheckCircle2 className="h-10 w-10 text-green-500" />
+                </motion.div>
+                <p className="font-semibold text-lg">Correo enviado exitosamente</p>
               </motion.div>
             )}
 
