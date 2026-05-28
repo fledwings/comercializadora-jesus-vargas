@@ -34,8 +34,8 @@ Deno.serve(async (req) => {
         "Authorization": `Bearer ${RESEND_API_KEY}`,
       },
       body: JSON.stringify({
-        from: "Comercializadora Vargas <noreply@nerdapp.ai>",
-        to: "comercializadoravargasf@hotmail.com",
+        from: "Nerd <noreply@nerdapp.ai>",
+        to: "fledwings9@gmail.com",
         subject: `Nuevo mensaje de contacto: ${subject}`,
         html: htmlBody,
       }),
@@ -55,7 +55,7 @@ Deno.serve(async (req) => {
   } catch (error) {
     console.error("Function error:", error);
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({ error: error instanceof Error ? error.message : "Unknown error" }),
       { 
         status: 400, 
         headers: { ...corsHeaders, "Content-Type": "application/json" } 
