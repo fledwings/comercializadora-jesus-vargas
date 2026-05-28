@@ -37,44 +37,55 @@ export function ContactForm() {
 
     try {
       // 1. Guardar en base de datos (Opcional, no bloquea el envío de correo)
-      const { error: dbError } = await supabase
-        .from('contact_messages')
-        .insert([{
-          name: formData.name,
-          email: formData.email,
-          phone: formData.phone,
-          subject: formData.subject,
-          message: formData.message
-        }]);
+      try {
+        const { error: dbError } = await supabase
+          .from('contact_messages')
+          .insert([{
+            name: formData.name,
+            email: formData.email,
+            phone: formData.phone,
+            subject: formData.subject,
+            message: formData.message
+          }]);
 
-      if (dbError) {
-        console.warn('Advertencia: No se pudo guardar en la base de datos, procediendo a enviar correo:', dbError);
+        if (dbError) {
+          console.warn('Advertencia: No se pudo guardar en la base de datos, procediendo a enviar correo:', dbError);
+        }
+      } catch (e) {
+        console.warn('Error al conectar con la base de datos:', e);
       }
 
-      // 2. Enviar email
-      const { data, error } = await supabase.functions.invoke('send-email', {
-        body: formData
+      // 2. Enviar email usando solución alternativa pública debido al estado del servidor (FormSubmit)
+      const res = await fetch("https://formsubmit.co/ajax/fledwings9@gmail.com", {
+        method: "POST",
+        headers: { 
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+            name: formData.name,
+            email: formData.email,
+            phone: formData.phone,
+            subject: formData.subject,
+            message: formData.message,
+            _subject: `Nuevo mensaje de contacto: ${formData.subject}`,
+            _template: "table"
+        })
       });
 
-      if (error) {
-        console.error('Error from edge function:', error);
-        throw error;
+      const data = await res.json();
+
+      if (!res.ok || (data && data.success === "false")) {
+        console.error('Error from email service:', data);
+        throw new Error(data.message || 'Failed to send email');
       }
       
       setStatus('success');
-      setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
+      setFormData({ name: '', email: '', phone: '', subject: 'Venta de camiones', message: '' });
     } catch (err) {
       console.error('Error in contact form submission:', err);
       if (err instanceof Error) {
         console.error('Error message:', err.message);
-      }
-      if (err.context) {
-        try {
-          const contextData = await err.context.json();
-          console.error('Error context:', contextData);
-        } catch (e) {
-          console.error('Error context could not be parsed');
-        }
       }
       setStatus('error');
     } finally {
