@@ -55,29 +55,20 @@ export function ContactForm() {
         console.warn('Error al conectar con la base de datos:', e);
       }
 
-      // 2. Enviar email usando solución alternativa pública debido al estado del servidor (FormSubmit)
-      const res = await fetch("https://formsubmit.co/ajax/fledwings9@gmail.com", {
-        method: "POST",
-        headers: { 
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-        },
-        body: JSON.stringify({
+      // 2. Enviar email usando Supabase Edge Function
+      const { data, error } = await supabase.functions.invoke('send-email', {
+        body: {
             name: formData.name,
             email: formData.email,
             phone: formData.phone,
             subject: formData.subject,
-            message: formData.message,
-            _subject: `Nuevo mensaje de contacto: ${formData.subject}`,
-            _template: "table"
-        })
+            message: formData.message
+        }
       });
 
-      const data = await res.json();
-
-      if (!res.ok || (data && data.success === "false")) {
-        console.error('Error from email service:', data);
-        throw new Error(data.message || 'Failed to send email');
+      if (error) {
+        console.error('Error from edge function:', error);
+        throw error;
       }
       
       setStatus('success');
