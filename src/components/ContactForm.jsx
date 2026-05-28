@@ -36,17 +36,47 @@ export function ContactForm() {
     setStatus(null);
 
     try {
+      // 1. Guardar en base de datos
+      const { error: dbError } = await supabase
+        .from('contact_messages')
+        .insert([{
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          subject: formData.subject,
+          message: formData.message
+        }]);
+
+      if (dbError) {
+        console.error('Error saving to database:', dbError);
+        throw new Error('No se pudo guardar el mensaje en la base de datos.');
+      }
+
+      // 2. Enviar email
       const { data, error } = await supabase.functions.invoke('send-email', {
         body: formData
       });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error from edge function:', error);
+        throw error;
+      }
       
       setStatus('success');
       setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
     } catch (err) {
-      console.error('Error sending email details:', err);
-      if (err.context) console.error('Error context:', await err.context.json().catch(() => 'No JSON context'));
+      console.error('Error in contact form submission:', err);
+      if (err instanceof Error) {
+        console.error('Error message:', err.message);
+      }
+      if (err.context) {
+        try {
+          const contextData = await err.context.json();
+          console.error('Error context:', contextData);
+        } catch (e) {
+          console.error('Error context could not be parsed');
+        }
+      }
       setStatus('error');
     } finally {
       setIsSubmitting(false);
@@ -108,7 +138,7 @@ export function ContactForm() {
                 <Input 
                   id="phone" 
                   name="phone" 
-                  type="tel"
+                  type="text"
                   required 
                   placeholder="Ej: 5581153338 o 55 8115 3338"
                   value={formData.phone}

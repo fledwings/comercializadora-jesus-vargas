@@ -23,8 +23,8 @@ export default function App() {
         <AboutUs />
         <MissionVision />
         <Services />
-        <Process />
         <SpareParts />
+        <Process />
         <Contact />
       </main>
       <Footer />

@@ -14,24 +14,41 @@ export function Navbar() {
   }, []);
 
   const navLinks = [
-    { name: 'Home', href: '#home' },
-    { name: 'Services', href: '#services' },
-    { name: 'Our Team', href: '#about' },
-    { name: 'Contact Us', href: '#contact' }
+    { name: 'Inicio', href: '#home' },
+    { name: 'Acerca de', href: '#about' },
+    { name: 'Servicios', href: '#services' },
+    { name: 'Repuestos', href: '#parts' },
+    { name: 'Proceso', href: '#process' },
+    { name: 'Contacto', href: '#contact' }
   ];
 
   const scrollTo = (href) => {
-    setMobileMenuOpen(false);
     const el = document.querySelector(href);
     if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
+      const headerOffset = 80; // 80px for h-20
+      const elementPosition = el.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.scrollY - headerOffset;
+      
+      // Close menu
+      setMobileMenuOpen(false);
+      
+      // Use setTimeout to ensure the menu closing state update
+      // doesn't interrupt the scrolling action in some mobile browsers
+      setTimeout(() => {
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        });
+      }, 50);
+    } else {
+      setMobileMenuOpen(false);
     }
   };
 
   return (
     <motion.header
       className={`fixed top-0 w-full z-50 transition-colors duration-300 ${
-        isScrolled ? 'bg-black/90 backdrop-blur-md border-b border-red-900/50' : 'bg-transparent'
+        isScrolled || mobileMenuOpen ? 'bg-black/95 backdrop-blur-md border-b border-red-900/50' : 'bg-transparent'
       }`}
       initial={{ y: -100 }}
       animate={{ y: 0 }}

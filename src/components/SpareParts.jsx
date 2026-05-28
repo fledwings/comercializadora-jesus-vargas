@@ -23,7 +23,7 @@ export function SpareParts() {
   ];
 
   return (
-    <section className="py-24 bg-[#0a0a0a] border-t border-red-900/20 overflow-hidden">
+    <section id="parts" className="py-24 bg-[#0a0a0a] border-t border-red-900/20 overflow-hidden">
       <div className="container px-4 md:px-6 mx-auto">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           

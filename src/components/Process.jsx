@@ -4,7 +4,7 @@ import { MousePointerClick, Zap } from 'lucide-react';
 
 export function Process() {
   return (
-    <section className="py-24 bg-black relative overflow-hidden">
+    <section id="process" className="py-24 bg-black relative overflow-hidden">
       {/* Abstract background accents */}
       <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-red-900/10 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/3"></div>
       <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-red-900/10 rounded-full blur-[100px] translate-y-1/2 -translate-x-1/3"></div>
